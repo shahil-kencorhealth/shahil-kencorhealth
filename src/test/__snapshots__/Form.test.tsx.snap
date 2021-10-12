@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Email input test 1`] = `"abc@gmail.com"`;
+
+exports[`Input Password input test 1`] = `"abcxyz"`;

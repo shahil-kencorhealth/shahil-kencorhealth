@@ -1,0 +1,177 @@
+/* eslint-disable no-undef */
+import * as api from "./util/utils";
+import axios from "axios";
+
+export interface Posts {
+  id: number,
+  body: String,
+  title: String,
+  userId:number
+}
+// type axiosTestResponse = () => Promise<Posts[]>;
+
+// jest.mock("axios");
+it("returns the title of the first album", async () => {
+  const mockedData = {
+    body: "Abcs D",
+    id: 1,
+    title: "My First Album",
+    userId: 3
+  };
+  //   {
+  //     body: "Abcs D",
+  //     id: 1,
+  //     title: "My First Album",
+  //     userId: 3
+  //   }
+  // ];
+  const api = await axios.get("ittt");
+  jest.spyOn(api, "getPostData").mockResolvedValueOnce(api);
+  // });
+
+  // const postData = await getPostData();
+  // expect(axios.request).toHaveBeenCalled();
+  // expect(axios.request).toHaveBeenCalledWith();
+  // console.log("object", postData);
+  // expect(postData.length).toEqual(3);
+
+  // const mock = jest.spyOn("axios", "get");
+  // mock.mockReturnValue({ data: mockedData });
+
+  const data = await getPostData(); // Run the function
+  expect(data).toEqual("My First Album"); // Make an assertion on the result
+  // expect(data).toMatchSnapshot();
+});
+
+
+
+//05-10-2021
+/* eslint-disable no-undef */
+// /* eslint-disable react/react-in-jsx-scope */
+// /* eslint-disable no-undef */
+// import 'jsdom-global/register';
+// import React from 'react';
+// import { shallow ,mount} from "enzyme";
+// import Login from "./pages/Login";
+// import { Provider } from "react-redux";
+// import thunk from "redux-thunk";
+// import configureMockStore from "redux-mock-store";
+// import { act } from "react-dom/test-utils";
+
+// // jest.mock("react-router-dom", () => {
+// //   const actual = jest.requireActual("react-router-dom");
+// //   return {
+// //     ...actual,
+// //     useHistory: () => ({ push: jest.fn(), useSelector: jest.fn() })
+// //   };
+// // });
+// const mockStore = configureMockStore([thunk]);
+
+// describe("Form", () => {
+//   // it("Check Login Form", () => {
+//   //   const store = mockStore({
+//   //     startup: { complete: false }
+//   //   });
+
+//   //   // const wrapper = shallow(<Provider store={store}><Login /></Provider>);
+//   //   const wrapper = shallow(<Provider store={store}><Login /></Provider>);
+//   //   console.log("wrap.instance().props.children?.toString", wrapper);
+//   //   const wrap = wrapper.find("#txtEmail").at(0);
+//   //   // console.log("wrap.instance().props.children?.toString", wrap.instance().props.children?.toString);
+//   //   // expect(wrap.instance().props.children?.toString).toEqual("abc@gmail.com");
+//   // });
+
+//   it("submits input values", async () => {
+//     // const onSubmit = jest.fn();
+//     const rendered = mount(<Login />);
+
+//     await act(async () => {
+//       rendered
+//         .find('input[name="email"]')
+//         .simulate("input", { value: "Hooray!" })
+//         .simulate("blur");
+//     });
+
+//   // });
+
+import React from "react";
+import { shallow } from "enzyme";
+// import Test from "./pages/Test";
+import Login from "./pages/Login";
+import { useSelector, useDispatch } from "react-redux";
+import thunk from "redux-thunk";
+import configureMockStore from "redux-mock-store";
+import { Store } from "./redux/Actions";
+
+jest.mock("react-router-dom", () => {
+  const actual = jest.requireActual("react-router-dom");
+  return {
+    ...actual,
+    useHistory: () => ({ push: jest.fn() })
+  };
+});
+
+const mockStore = configureMockStore([thunk]);
+const store = mockStore({
+  userDataReducer: {
+    loading: false,
+    isLoggedin: true,
+    isRegisterd: true,
+    isForgotpasswordSuccess: true,
+    user: Object
+  }
+});
+
+// jest.mock("react-redux", () => ({
+//   useSelector: jest.fn().mockImplementation(func => func(store))
+// }));
+
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  useSelector: jest.fn(),
+  useDispatch: () => mockDispatch
+}));
+describe("Input", () => {
+  let Wrapper: any;
+  useSelector.mockImplementation(() => (true));
+  useDispatch.mockReturnValue(mockDispatch);
+
+  beforeEach(() => {
+    Wrapper = shallow(<Login />);
+    // Wrapper = shallow(<Test />);
+    console.log("Wrapper Value", Wrapper);
+  });
+
+  it("test for input files", () => {
+    const input = Wrapper.find(".test");
+    console.log("input Value", input.props());
+
+    console.log("InPUT VALUE", input.props().value);
+  });
+});
+
+
+
+
+ // console.log("action.payload", typeof (action.payload));
+        // console.log("payload", action.payload);
+        // const items = [action.payload];
+        // console.log("ITEMS LENGHT", items);
+        // console.log("ITEMS", items);
+
+        // items.map(item => {
+        //   console.log("MAPPPINGS", item);
+        //   return 0;
+        // });
+
+        const allPost = action.payload; // [{ id: 2, body: "Abcd", title: "title", userId: 3 }, { id: 2, body: "Abcd", title: "title", userId: 3 }];
+        // items.map(i => {
+        //   allPost.push(i);
+        // });
+        // const allPost: Posts[] = [items];
+        console.log("in Reducer Type", allPost);
+        return {
+          ...state,
+          loading: false,
+          posts: allPost
+        };
