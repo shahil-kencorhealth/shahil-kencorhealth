@@ -28,10 +28,10 @@ export default function Routes () {
           ))}
 
           {privateRoutes.map((item, index) => (
-            <>
-              <Header/>
+            // <>
+            //   <Header/>
             <PrivateRoute key={index} {...item} />
-            </>
+            // </>
           ))}
 
           <Route render={() => <Redirect to="/login" />} />

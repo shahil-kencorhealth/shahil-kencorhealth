@@ -2,8 +2,8 @@ import React from 'react'
 
 export const EditPatient = () => {
     return (
-<div className="modal fade" id="EditPatient" tabIndex={-1} aria-labelledby="EditPatientLabel"
-			aria-hidden="true">
+<div className="modal fade show" id="EditPatient" tabIndex={-1} aria-labelledby="EditPatientLabel"
+			aria-hidden="true" style={{display:"block"}}>
     <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div className="modal-content">
             <div className="modal-header">

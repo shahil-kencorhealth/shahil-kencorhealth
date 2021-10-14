@@ -35,9 +35,9 @@ const reducer = persistReducer(
         const user: any = action.payload; // { email: "", password: "", caT: "AV" };
         // user.email = "abc@gmail.com";
         // user.password = "anc";
-        setToken("login-auth-token", user.response.authOutput.authToken);
-        setToken("kencor-user", JSON.stringify(user.response));
-        setToken("isLoggedIn", 'true');
+        // setToken("login-auth-token", user.response.authOutput.authToken);
+        // setToken("kencor-user", JSON.stringify(user.response));
+        // setToken("isLoggedIn", 'true');
         return {
           ...state,
           user: user,

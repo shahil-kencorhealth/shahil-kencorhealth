@@ -2,8 +2,8 @@ import React from 'react'
 
 export const AddAppointment = () => {
     return (
-        <div className="modal fade" id="AddAppointment" tabIndex={-1} aria-labelledby="AddAppointmentLabel"
-			aria-hidden="true">
+        <div className="modal fade show" id="AddAppointment" tabIndex={-1} aria-labelledby="AddAppointmentLabel"
+			aria-hidden="true" style={{display:"block"}}>
     <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div className="modal-content">
             <div className="modal-header">
