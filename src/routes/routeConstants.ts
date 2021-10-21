@@ -5,6 +5,7 @@ import Dashboard from "../pages/Dashboard";
 // import Message from "../pages/Message";
 import Login from "../pages/Login";
 import PateientList from "../pages/PateientList";
+import PatientView from "../pages/PatientView";
 
 export const publicRoutes = [
   // {
@@ -33,6 +34,10 @@ export const privateRoutes = [
   {
     path: "/list",
     component: PateientList
+  },
+  {
+    path: "/newPatient",
+    component: PatientView
   }
 
 ];

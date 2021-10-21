@@ -1,5 +1,4 @@
 export interface UserData {
-
     progress: boolean,
     isLoading: boolean,
     isRegisterd: boolean,
@@ -8,20 +7,38 @@ export interface UserData {
     isForgotpasswordSuccess: boolean,
     user: Object,
     posts: Object
-  }
+}
 
-
-  export interface PatientData {
-
+export interface PatientData {
     progress: boolean,
     isLoading: boolean,
     contact: Object,
-    alertCount:any
-  }
+    devices: Object,
+  alertCount: any,
+  diagnosisType: Object,
+  visitReasons: Object,
+  appointments:Object
+}
+
+export interface PatientViewData{
+  progress: boolean,
+  isLoading: boolean,
+  isCalenderLoading:boolean,
+  data:any,
+  patient:object
+}
+
+export interface PhysicianData {
+  progress: boolean,
+  isLoading: boolean,
+  physicianList:any
+}
 
 export interface Store {
-    userDataReducer:UserData
-    patientReducer:PatientData
+  userDataReducer:UserData
+  patientReducer: PatientData
+  physicianReducer:PhysicianData
+  patientViewReducer:PatientViewData
 }
 
 export interface Posts {

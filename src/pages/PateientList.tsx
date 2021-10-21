@@ -5,18 +5,20 @@ import { AddAppointment } from "./Modals/AddAppointment";
 import { DeleteUser } from "./Modals/DeleteUser";
 import { ManageDevices } from "./Modals/ManageDevices";
 import { Store } from "../redux/Actions";
-import { getAlertCount, getContact } from "../redux/action";
+import { deactivatePatient, getAlertCount, getContact, getDiagnosisType,  getPatientView, getPhysicians } from "../redux/action";
 import { Spinner } from "reactstrap";
 import Appointment from "../components/HomePatient/Appointment";
 import Billing from "../components/HomePatient/Billing";
 import Message from "../components/HomePatient/Message";
-import Autosuggest from 'react-autosuggest';
-import './suggestion.css';
+import Autosuggest from "react-autosuggest";
+import { useHistory } from "react-router";
+import "./suggestion.css";
 
 export interface Patient {
   id: number;
   fullName: string;
   lastName: string;
+  firstName: string;
   mobileNumber: string;
   alertLevel: string;
   lastVisit: string;
@@ -48,9 +50,10 @@ const ALERT_TYPE: any = {
   7: "all",
 };
 
-export default function PateientList() {
+export default function PateientList(props: any) {
   const initialState: Patient[] = [];
   // const initialStates: any[] = [];
+  const history = useHistory();
   const [post, setpost] = useState(initialState);
   // const [selectedPost, setSelectedPost] = useState({ id: 0, title: "", body: "" });
   const patientList = useSelector(
@@ -60,6 +63,7 @@ export default function PateientList() {
     (state: Store) => state.patientReducer.alertCount
   );
   const loading = useSelector((state: Store) => state.patientReducer.isLoading);
+  const diagnosisType = useSelector((state: Store) => state.patientReducer.diagnosisType);
   const [filteredPatients, setFilteredPatients] = useState(initialState);
   const [editPatient, seteditPatient] = useState(false);
   const [deleteUser, setdeleteUser] = useState(false);
@@ -67,22 +71,47 @@ export default function PateientList() {
   const [manageDevice, setmanageDevice] = useState(false);
   const [searchedList, setSearchedList] = useState(initialState);
   const [searchedText, setSearchedText] = useState("");
+  const [editSelectedPatient, setEditSelectedPatient] = useState([]);
+  const [selectManageDevice, setSelectManageDevice] = useState([]);
+  const [selectAction, setSelectAction] = useState("");
+  const [diagnosisTypeSelect, setDiagnosisTypeSelect] = useState([]);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getContact());
     dispatch(getAlertCount());
+    dispatch(getPhysicians());
+    dispatch(getDiagnosisType());
+    
   }, []);
 
   useEffect(() => {
     if (patientList) {
       setFilteredPatients(Object.values(patientList));
     }
-
   }, [patientList]);
 
   useEffect(() => {
+    if (Object.values(diagnosisType).length > 0) {
+      const ds:any= [];
+      console.log("Object.values(diagnosisType)", Object.values(diagnosisType));
+      Object.values(diagnosisType)[0].map((i:any) => {
+        ds.push({ label: i });
+      })
+
+      Object.values(diagnosisType)[1].map((i:any,index:any) => {
+        ds[index].value = i;
+      })
+      console.log("object ds ds", ds);
+      // setFilteredPatients(Object.values(patientList));
+      setDiagnosisTypeSelect(ds);
+    }
+  }, [diagnosisType]);
+
+  
+  useEffect(() => {
+    // console.log("SET");
     console.log("SET");
   }, [filteredPatients, searchedList]);
 
@@ -94,6 +123,7 @@ export default function PateientList() {
     console.log("All Filtered", filteredPatients);
     // patients.sort((a,b) => (a[property] > b[property]) ? 1 : ((b[property] > a[property]) ? -1 : 0))
   };
+
   const alertStatusSelected = (alertN: any) => {
     console.log("ALERT N", alertN);
     console.log("ALERT N Value", ALERT_TYPE[alertN]);
@@ -136,25 +166,34 @@ export default function PateientList() {
     }
   };
 
-  const getSuggestionValue = (suggestion:any) => suggestion.fullName;
+  const getSuggestionValue = (suggestion: any) => suggestion.fullName;
 
-  const renderSuggestion = (suggestion:any) => (
-    <div>
-      {suggestion.fullName}
-    </div>
+  const renderSuggestion = (suggestion: any) => (
+    <div>{suggestion.fullName}</div>
   );
 
-  const  onChange = (event:any, { newValue }:any) => {
+  const onChange = (event: any, { newValue }: any) => {
     setSearchedText(newValue);
   };
-  
-  const selectChange = (e: number) => {
-    if (MODAL_TYPE.EDIT_PATIENT === e) seteditPatient(true);
-    else if (MODAL_TYPE.DELETE_USER === e) setdeleteUser(true);
-    else if (MODAL_TYPE.ADD_APPOINTMENT === e) setaddAppointment(true);
-    else if (MODAL_TYPE.MANAGE_DEVICE === e) setmanageDevice(true);
+
+  const selectChange = (e: number, user: any) => {
+    console.log("USER EDIT", user);
+    if (MODAL_TYPE.EDIT_PATIENT === e) {
+      seteditPatient(true);
+      setEditSelectedPatient(user);
+    } else if (MODAL_TYPE.DELETE_USER === e) {
+      setdeleteUser(true);
+    } else if (MODAL_TYPE.ADD_APPOINTMENT === e) {
+      setEditSelectedPatient(user);
+      setaddAppointment(true);
+    } else if (MODAL_TYPE.MANAGE_DEVICE === e) {
+      console.log("object ON ADD DEVICES", e);
+      setSelectManageDevice(user);
+      setmanageDevice(true);
+    }
+    setSelectAction('ac');
   };
-  
+
   const value = searchedText;
   // const suggestions = searchedList;
 
@@ -163,15 +202,15 @@ export default function PateientList() {
   //   value: searchText,
   //   onChange: onChange
   // };
-  console.log("editPatient",editPatient)
+  console.log("editPatient", editPatient);
 
   return (
     <div className="">
       <div className="app d-flex flex-column">
         <div className="content">
           <div className="page-wrapper">
-            <div className="page-header border-bottom">
-              <div className="container">
+            <div className="container">
+              {/* <div className="page-header border-bottom">
                 <div className="profile-container d-flex align-items-center">
                   <div className="flex-shrink-0">
                     <img src="img/avatar.png" alt="Avatar" />
@@ -181,10 +220,8 @@ export default function PateientList() {
                     <p className="fs-5 fw-light m-0">Munawar PV</p>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="page-content">
-              <div className="container">
+              </div> */}
+              <div className="page-content mt-2">
                 <div className="tabs-custom">
                   <div className="tabs-header">
                     <ul className="nav nav-tabs" role="tablist">
@@ -256,20 +293,46 @@ export default function PateientList() {
                         </div>
                       )}
                       <div style={{ opacity: loading ? "0.3" : "1" }}>
-                        <div className="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                        <div className="d-flex flex-wrap align-items-center justify-content-between mb-4 pb-1">
                           <h4 className="m-0">
                             Today{" "}
                             <span className="text-success">
                               October 7, 2021
                             </span>
                           </h4>
-                          <button
-                            type="button"
-                            className="btn btn-primary-theme mt-3 mt-md-0"
-                            onClick={() => alertStatusSelected(7)}
-                          >
-                            List All Patient
-                          </button>
+                          <div className="ms-auto d-flex flex-wrap align-items-center">
+                            <div className="form-group min-w-250 mt-3 mt-md-0 me-3">
+                              <Autosuggest
+                                suggestions={searchedList}
+                                onSuggestionsFetchRequested={({ value }) => {
+                                  setSearchedText(value);
+                                  searchText(value);
+                                  // setSearchedList(getSuggestionValue(value));
+                                }}
+                                onSuggestionsClearRequested={() => {
+                                  setSearchedList([]);
+                                }}
+                                getSuggestionValue={getSuggestionValue}
+                                renderSuggestion={renderSuggestion}
+                                inputProps={{
+                                  placeholder: "Search for a patient'",
+                                  className: "form-control",
+                                  value: value,
+                                  onChange: (_, { newValue, method }) => {
+                                    console.log("HEELO ON CHANGE", newValue);
+                                    setSearchedText(newValue);
+                                  },
+                                }}
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              className="btn btn-primary-theme mt-3 mt-md-0"
+                              onClick={() => alertStatusSelected(7)}
+                            >
+                              List All Patient
+                            </button>
+                          </div>
                         </div>
                         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 stats">
                           <div className="col mb-3 mb-md-0">
@@ -385,30 +448,6 @@ export default function PateientList() {
                           </div>
                         </div>
                         <div className="row my-4 pt-2">
-                          <div className="col-md-4">
-                            <div className="form-group">
-                            <Autosuggest
-                                suggestions={searchedList}
-                                onSuggestionsFetchRequested={({ value }) => {
-                                  setSearchedText(value);
-                                  searchText(value);
-                                  // setSearchedList(getSuggestionValue(value));
-                                }}
-                                onSuggestionsClearRequested={() => { setSearchedList([]) }}
-                                getSuggestionValue={getSuggestionValue}
-                                renderSuggestion={renderSuggestion}
-                                inputProps= {{
-                                  placeholder: "Search for a patient'",
-                                  value: value,
-                                  onChange: (_, { newValue, method }) => {
-                                    console.log('HEELO ON CHANGE', newValue);
-                                    setSearchedText(newValue);
-                                  }
-                                }}
-                              />
-                            </div>
-                          </div>
-
                           <div className="table-responsive">
                             <table className="table table-hover m-0">
                               <thead className="table-light">
@@ -463,10 +502,8 @@ export default function PateientList() {
                                   >
                                     Phone
                                   </th>
-                                  <th>
-                                    {" "}
-                                    onClick=
-                                    {() => {
+                                  <th
+                                    onClick={() => {
                                       const arr = filteredPatients.sort(
                                         (a, b) =>
                                           a.fullName > b.fullName
@@ -477,6 +514,7 @@ export default function PateientList() {
                                       );
                                       sortList(arr);
                                     }}
+                                  >
                                     Appointment Time
                                   </th>
                                   <th>Last Visit</th>
@@ -502,18 +540,94 @@ export default function PateientList() {
                                 {filteredPatients &&
                                   filteredPatients.map((i) => (
                                     <tr>
-                                      <td>
+                                      <td
+                                        onClick={() => {
+                                          console.log(i.id);
+                                          props.history.push({
+                                            pathname: "/newPatient",
+                                            state: {
+                                              id: i.id,
+                                              mobileNumber: i.mobileNumber,
+                                            },
+                                          });
+                                        }}
+                                      >
                                         <img
                                           src="img/user.svg"
                                           className="user-icon"
                                           alt="User Icon"
                                         />
                                       </td>
-                                      <td>{i.fullName}</td>
-                                      <td>{i.lastName}</td>
-                                      <td>{i.mobileNumber}</td>
-                                      <td>-</td>
-                                      <td>-</td>
+                                      <td
+                                        onClick={() => {
+                                          console.log(i.id);
+                                          props.history.push({
+                                            pathname: "/newPatient",
+                                            state: {
+                                              id: i.id,
+                                              mobileNumber: i.mobileNumber,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        {i.firstName}
+                                      </td>
+                                      <td
+                                        onClick={() => {
+                                          console.log(i.id);
+                                          props.history.push({
+                                            pathname: "/newPatient",
+                                            state: {
+                                              id: i.id,
+                                              mobileNumber: i.mobileNumber,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        {i.lastName}
+                                      </td>
+                                      <td
+                                        onClick={() => {
+                                          console.log(i.id);
+                                          props.history.push({
+                                            pathname: "/newPatient",
+                                            state: {
+                                              id: i.id,
+                                              mobileNumber: i.mobileNumber,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        {i.mobileNumber}
+                                      </td>
+                                      <td
+                                        onClick={() => {
+                                          console.log(i.id);
+                                          props.history.push({
+                                            pathname: "/newPatient",
+                                            state: {
+                                              id: i.id,
+                                              mobileNumber: i.mobileNumber,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        -
+                                      </td>
+                                      <td
+                                        onClick={() => {
+                                          console.log(i.id);
+                                          props.history.push({
+                                            pathname: "/newPatient",
+                                            state: {
+                                              id: i.id,
+                                              mobileNumber: i.mobileNumber,
+                                            },
+                                          });
+                                        }}
+                                      >
+                                        -
+                                      </td>
                                       <td>
                                         {/* {console.log("Fname :"+i.firstName+' ALERT LEVEL: '+i.alertLevel)} */}
                                         {i.alertLevel === undefined && (
@@ -551,9 +665,11 @@ export default function PateientList() {
                                           className="form-select"
                                           onChange={(e) =>
                                             selectChange(
-                                              parseInt(e.target.value)
+                                              parseInt(e.target.value),
+                                              i
                                             )
                                           }
+                                          value={selectAction}
                                         >
                                           <option value="ac">Action</option>
                                           <option value="3">
@@ -586,7 +702,7 @@ export default function PateientList() {
                         </div>
                       </div>
                     </div>
-
+                                              
                     <div
                       className="tab-pane fade"
                       role="tabpanel"
@@ -611,21 +727,50 @@ export default function PateientList() {
             </div>
           </div>
         </div>
-        {editPatient && (
-            <EditPatient />
-        )}
+        {diagnosisTypeSelect.length > 0 &&
+          <EditPatient editPatient={editPatient}
+            onEditModalClose={() => { seteditPatient(false) }}
+            epatient={editSelectedPatient}
+            diagnosisType={diagnosisTypeSelect}
+          />
+        }
+        {/* )} */}
 
-        {addAppointment && (
-            <AddAppointment />
-        )}
+        {addAppointment && <AddAppointment />}
 
-        {deleteUser && (
-            <DeleteUser />
-        )}
+        {deleteUser && <DeleteUser />}
 
-        {manageDevice && (
-            <ManageDevices />
-        )}
+        {/* {manageDevice && ( */}
+        <ManageDevices
+          manageDevice={manageDevice}
+          onEditModalClose={() => {
+            setmanageDevice(false);
+          }}
+          eManageDevice={selectManageDevice}
+        />
+        {/* )} */}
+        {/* <AddNotes
+         addNote = {addNote}
+         onEditModalClose={() => { setAddNote(false) }}
+         ePatient = {editSelectedPatient}
+
+        /> */}
+        
+        <DeleteUser
+                 deleteUser = {deleteUser}
+                 onEditModalClose={() => { setdeleteUser(false) }}
+                 ePatient = {editSelectedPatient}
+        
+        />
+
+        <AddAppointment
+                 addAppointment = {addAppointment}
+                 onEditModalClose={() => { setaddAppointment(false) }}
+                 ePatient = {editSelectedPatient}
+        
+        />
+
+        
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from 'moment';
 
 export const valiadteToken = () => {
   const token = getToken("login-auth-token");
@@ -26,3 +27,21 @@ export const getPostData = async () => {
   return data;
   // });
 };
+
+
+export const formatDate = (dateJson: any) => {
+  const date = new Date(dateJson);
+  // const format = 'DD/MM/yyyy';
+  const format1 = 'YYYY-MM-DD';
+  console.log("DAte FORMATED", moment(date).format(format1));
+  return moment(date).format(format1);
+}
+
+
+export const formatDateTime = (dateJson: any) => {
+  const date = new Date(dateJson);
+  // const format = 'DD/MM/yyyy';
+  const format1 = 'YYYY-MM-DD HH:mm:s';
+  console.log("DAte FORMATED", moment(date).format(format1));
+  return moment(date).format(format1);
+}

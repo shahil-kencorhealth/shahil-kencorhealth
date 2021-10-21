@@ -3,9 +3,15 @@ import React from "react";
 export default function Appointment() {
   return (
     <React.Fragment>
-      <div className="row mb-3">
-        <div className="col-md-4">
-          <div className="form-group">
+      <div className="d-flex flex-wrap align-items-center justify-content-between mb-4">
+        <div>
+            <h4>Today's Schedule</h4>
+            <p className="text-danger fw-500 m-0">
+              There are currently 0 Patient waiting for you
+            </p>
+        </div>
+        <div className="ms-auto d-flex flex-wrap align-items-center">
+          <div className="form-group min-w-250 mt-3 mt-md-0">
             <input
               type="text"
               className="form-control"
@@ -14,10 +20,6 @@ export default function Appointment() {
           </div>
         </div>
       </div>
-      <h4>Today's Schedule</h4>
-      <p className="text-danger fw-500">
-        There are currently 0 Patient waiting for you
-      </p>
       <div className="table-responsive mb-4">
         <table className="table table-hover m-0">
           <thead className="table-light">

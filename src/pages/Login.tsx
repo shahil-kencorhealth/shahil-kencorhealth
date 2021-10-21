@@ -5,19 +5,28 @@ import { useFormik } from "formik";
 import { Login1Schema } from "../validationScrema/user";
 import { Store } from "../redux/Actions";
 import { login } from "../redux/action";
-import { Progress } from "reactstrap";
 
 
 export default function Login() {
   const { push } = useHistory();
+  const dispatch = useDispatch();
+
   const isLoggedin: boolean = useSelector(
     (state: Store) => state.userDataReducer.isLoggedin
-  ); //JSON.parse(getToken("isLoggedIn") || 'false');
+  );
   const isLoading: boolean = useSelector(
     (state: Store) => state.userDataReducer.progress
   );
-  //   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+  }, [])
+
+  useEffect(() => {
+    if (isLoggedin) {
+        push("/home");
+    }
+  }, [isLoggedin]);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,12 +39,9 @@ export default function Login() {
     },
   });
 
-  useEffect(() => {
-    if (isLoggedin) {
-        push("/home");
-    }
-  }, [isLoggedin]);
+
   const { errors, touched } = formik;
+
   return (
     <div className="app d-flex flex-column">
       <div className="content">

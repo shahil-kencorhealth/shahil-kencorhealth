@@ -1,9 +1,10 @@
 import { apiCall, METHOD } from "../../service/baseApiCall";
-import { LOGIN, REGISTER, FORGOT_PASSWORD, GET_POSTS, UPDATE_POSTS, DELETE_POSTS, ADD_POSTS, GET_CONTACT } from "../constants/action-types";
+import { LOGIN, REGISTER, FORGOT_PASSWORD, GET_POSTS, UPDATE_POSTS, DELETE_POSTS, ADD_POSTS, GET_PATIENT } from "../constants/action-types";
 import {  Store } from "../Actions";
 import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
 import { setToken } from "../../util/utils";
+import { USER_SIGNIN } from "../../service/apiEndPoints";
 // import { AxiosResponse } from "axios";
 
 
@@ -16,7 +17,7 @@ export const loginInit = (email:any, password:any): ThunkAction<void, Store, unk
     type: LOGIN.LOGIN_INITLIZATION
   });
   apiCall(
-    "user/signIn",
+    USER_SIGNIN,
     {
       email: email,
       mobileNumber: email,

@@ -35,17 +35,19 @@ export const apiCall = (
   const req = request();
   
   req.then(response => {
-    console.log("object", response);
+    // console.log("response.status ===>", response.status);
     if ((response.status === 200 || response.status === 201 || response.status === 204 || response.data) && response.data !== '') {
-      console.log("onSuccess(response.data);")
+      // console.log("onSuccess(response.data);")
       onSuccess(response.data);
     } else {
-      console.log("onFailure(ronFailure);");
+      // console.log("onFailure(ronFailure);");
       onFailure("Something went wrong");
     }
   })
     .catch(error => {
-      console.log("IN ERROR RESPONSE", error);
+      // console.log(error.response.data);
+      // console.log(error.response.status);
+      // console.log(error.response.headers);
       if (error && error.response) {
         switch (error.response.status) {
           case 401:
@@ -55,7 +57,19 @@ export const apiCall = (
                 : "Session expired"
             );
             break;
+            case 500:
+              localStorage.removeItem("persist:basecode-demo")
+              localStorage.removeItem("isLoggedIn")
+              localStorage.removeItem("kencor-user")
+              localStorage.removeItem("login-auth-token")
 
+               window.location.href="/login"
+              onFailure(
+                error.response.data && typeof error.response.data.detail
+                  ? error.response.data.detail
+                  : "Session expired"
+              );
+              break;
           default:
             onFailure(error.response.data ? error.response.data : "Something went wrong");
             break;

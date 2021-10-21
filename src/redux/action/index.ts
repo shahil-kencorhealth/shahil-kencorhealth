@@ -1,8 +1,10 @@
-import { LOGIN, REGISTER, FORGOT_PASSWORD, GET_POSTS, UPDATE_POSTS, DELETE_POSTS, ADD_POSTS, GET_CONTACT,GET_ALERT_COUNT} from "../constants/action-types";
-import { Posts, Store, UserData } from "../Actions";
+import { LOGIN, REGISTER, FORGOT_PASSWORD, GET_POSTS, UPDATE_POSTS, DELETE_POSTS, ADD_POSTS, GET_PATIENT,GET_ALERT_COUNT, PATIENT_DASHBOARD, PATIENT_VIEW} from "../constants/action-types";
+import { PatientViewData, Posts, Store, UserData } from "../Actions";
 
 export * from "./userActions";
 export * from "./patientActions";
+export * from "./physicianActions";
+export * from "./patientView"
 
 
 export type ActionTypes =
@@ -27,9 +29,16 @@ export type ActionTypes =
   | { type: typeof DELETE_POSTS.DELETE_POSTS_INITIALIZATION; payload: Posts[] }
   | { type: typeof DELETE_POSTS.DELETE_POSTS_SUCCESS; payload: Posts[] }
   | { type: typeof DELETE_POSTS.DELETE_POSTS_ERROR; payload: Posts[] }
-  | { type: typeof GET_CONTACT.GET_CONTACT_INITIALIZATION; payload: Posts[] }
-  | { type: typeof GET_CONTACT.GET_CONTACT_SUCCESS; payload: Posts[] }
-  | { type: typeof GET_CONTACT.GET_CONTACT_ERROR; payload: Posts[] }
+  | { type: typeof GET_PATIENT.GET_PATIENT_INITIALIZATION; payload: Posts[] }
+  | { type: typeof GET_PATIENT.GET_PATIENT_SUCCESS; payload: Posts[] }
+  | { type: typeof GET_PATIENT.GET_PATIENT_ERROR; payload: Posts[] }
   | { type: typeof GET_ALERT_COUNT.GET_ALERT_COUNT_INITIALIZATION; payload: Posts[] }
   | { type: typeof GET_ALERT_COUNT.GET_ALERT_COUNT_SUCCESS; payload: Posts[] }
   | { type: typeof GET_ALERT_COUNT.GET_ALERT_COUNT_ERROR; payload: Posts[] }
+  | { type: typeof PATIENT_DASHBOARD.PATIENT_DASHBOARD_INITIALIZATION; payload: PatientViewData[] }
+  | { type: typeof PATIENT_DASHBOARD.PATIENT_DASHBOARD_SUCCESS; payload: PatientViewData[] }
+  | { type: typeof PATIENT_DASHBOARD.PATIENT_DASHBOARD_ERROR; payload: PatientViewData[] }
+  | { type: typeof PATIENT_VIEW.PATIENT_VIEW_INITIALIZATION; payload: PatientViewData }
+  | { type: typeof PATIENT_VIEW.PATIENT_VIEW_SUCCESS; payload: PatientViewData }
+  | { type: typeof PATIENT_VIEW.PATIENT_VIEW_ERROR; payload: PatientViewData }
+

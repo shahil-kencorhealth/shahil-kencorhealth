@@ -39,4 +39,14 @@ const Login1Schema = Yup.object().shape({
   password: Yup.string().required("Password is Required.")
 });
 
-export { SignupSchema, LoginSchema, ForgotPasswordSchema, AddEditMessageSchema, Login1Schema };
+const EditPatientSchema = Yup.object().shape({
+  firstName: Yup.string().required("first name is Required"),
+  lastName: Yup.string().required("last name is Required"),
+  mobileNumber: Yup.string().required("mobile number is Required"),
+  // physician
+  dob:Yup.string().required("dob or Phonenumber is Required"),
+  // email: Yup.string().required("Email or Phonenumber is Required"),
+  // password: Yup.string().required("Password is Required.")
+});
+
+export { SignupSchema, LoginSchema, ForgotPasswordSchema, AddEditMessageSchema, Login1Schema, EditPatientSchema };
