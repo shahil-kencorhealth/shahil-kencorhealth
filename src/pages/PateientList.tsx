@@ -5,7 +5,14 @@ import { AddAppointment } from "./Modals/AddAppointment";
 import { DeleteUser } from "./Modals/DeleteUser";
 import { ManageDevices } from "./Modals/ManageDevices";
 import { Store } from "../redux/Actions";
-import { deactivatePatient, getAlertCount, getContact, getDiagnosisType,  getPatientView, getPhysicians } from "../redux/action";
+import {
+  deactivatePatient,
+  getAlertCount,
+  getContact,
+  getDiagnosisType,
+  getPatientView,
+  getPhysicians,
+} from "../redux/action";
 import { Spinner } from "reactstrap";
 import Appointment from "../components/HomePatient/Appointment";
 import Billing from "../components/HomePatient/Billing";
@@ -63,7 +70,9 @@ export default function PateientList(props: any) {
     (state: Store) => state.patientReducer.alertCount
   );
   const loading = useSelector((state: Store) => state.patientReducer.isLoading);
-  const diagnosisType = useSelector((state: Store) => state.patientReducer.diagnosisType);
+  const diagnosisType = useSelector(
+    (state: Store) => state.patientReducer.diagnosisType
+  );
   const [filteredPatients, setFilteredPatients] = useState(initialState);
   const [editPatient, seteditPatient] = useState(false);
   const [deleteUser, setdeleteUser] = useState(false);
@@ -83,7 +92,6 @@ export default function PateientList(props: any) {
     dispatch(getAlertCount());
     dispatch(getPhysicians());
     dispatch(getDiagnosisType());
-    
   }, []);
 
   useEffect(() => {
@@ -94,22 +102,21 @@ export default function PateientList(props: any) {
 
   useEffect(() => {
     if (Object.values(diagnosisType).length > 0) {
-      const ds:any= [];
+      const ds: any = [];
       console.log("Object.values(diagnosisType)", Object.values(diagnosisType));
-      Object.values(diagnosisType)[0].map((i:any) => {
+      Object.values(diagnosisType)[0].map((i: any) => {
         ds.push({ label: i });
-      })
+      });
 
-      Object.values(diagnosisType)[1].map((i:any,index:any) => {
+      Object.values(diagnosisType)[1].map((i: any, index: any) => {
         ds[index].value = i;
-      })
+      });
       console.log("object ds ds", ds);
       // setFilteredPatients(Object.values(patientList));
       setDiagnosisTypeSelect(ds);
     }
   }, [diagnosisType]);
 
-  
   useEffect(() => {
     // console.log("SET");
     console.log("SET");
@@ -191,7 +198,7 @@ export default function PateientList(props: any) {
       setSelectManageDevice(user);
       setmanageDevice(true);
     }
-    setSelectAction('ac');
+    setSelectAction("ac");
   };
 
   const value = searchedText;
@@ -542,9 +549,8 @@ export default function PateientList(props: any) {
                                     <tr>
                                       <td
                                         onClick={() => {
-                                          console.log(i.id);
                                           props.history.push({
-                                            pathname: "/newPatient",
+                                            pathname: "/",
                                             state: {
                                               id: i.id,
                                               mobileNumber: i.mobileNumber,
@@ -558,11 +564,11 @@ export default function PateientList(props: any) {
                                           alt="User Icon"
                                         />
                                       </td>
+                                   
                                       <td
                                         onClick={() => {
-                                          console.log(i.id);
                                           props.history.push({
-                                            pathname: "/newPatient",
+                                            pathname: "/",
                                             state: {
                                               id: i.id,
                                               mobileNumber: i.mobileNumber,
@@ -572,11 +578,11 @@ export default function PateientList(props: any) {
                                       >
                                         {i.firstName}
                                       </td>
+                                  
                                       <td
                                         onClick={() => {
-                                          console.log(i.id);
                                           props.history.push({
-                                            pathname: "/newPatient",
+                                            pathname: "/",
                                             state: {
                                               id: i.id,
                                               mobileNumber: i.mobileNumber,
@@ -586,11 +592,11 @@ export default function PateientList(props: any) {
                                       >
                                         {i.lastName}
                                       </td>
+                                    
                                       <td
                                         onClick={() => {
-                                          console.log(i.id);
                                           props.history.push({
-                                            pathname: "/newPatient",
+                                            pathname: "/",
                                             state: {
                                               id: i.id,
                                               mobileNumber: i.mobileNumber,
@@ -600,11 +606,11 @@ export default function PateientList(props: any) {
                                       >
                                         {i.mobileNumber}
                                       </td>
+                                   
                                       <td
                                         onClick={() => {
-                                          console.log(i.id);
                                           props.history.push({
-                                            pathname: "/newPatient",
+                                            pathname: "/",
                                             state: {
                                               id: i.id,
                                               mobileNumber: i.mobileNumber,
@@ -614,11 +620,11 @@ export default function PateientList(props: any) {
                                       >
                                         -
                                       </td>
+                                   
                                       <td
                                         onClick={() => {
-                                          console.log(i.id);
                                           props.history.push({
-                                            pathname: "/newPatient",
+                                            pathname: "/",
                                             state: {
                                               id: i.id,
                                               mobileNumber: i.mobileNumber,
@@ -628,8 +634,8 @@ export default function PateientList(props: any) {
                                       >
                                         -
                                       </td>
+
                                       <td>
-                                        {/* {console.log("Fname :"+i.firstName+' ALERT LEVEL: '+i.alertLevel)} */}
                                         {i.alertLevel === undefined && (
                                           <div className="status green"></div>
                                         )}
@@ -702,13 +708,13 @@ export default function PateientList(props: any) {
                         </div>
                       </div>
                     </div>
-                                              
+
                     <div
                       className="tab-pane fade"
                       role="tabpanel"
                       id="Appointments"
                     >
-                      <Appointment />
+                      {/* <Appointment /> */}
                     </div>
 
                     <div className="tab-pane fade" role="tabpanel" id="Billing">
@@ -719,7 +725,7 @@ export default function PateientList(props: any) {
                       role="tabpanel"
                       id="Messages"
                     >
-                      <Message />
+                      {/* <Message /> */}
                     </div>
                   </div>
                 </div>
@@ -727,13 +733,16 @@ export default function PateientList(props: any) {
             </div>
           </div>
         </div>
-        {diagnosisTypeSelect.length > 0 &&
-          <EditPatient editPatient={editPatient}
-            onEditModalClose={() => { seteditPatient(false) }}
+        {diagnosisTypeSelect.length > 0 && (
+          <EditPatient
+            editPatient={editPatient}
+            onEditModalClose={() => {
+              seteditPatient(false);
+            }}
             epatient={editSelectedPatient}
             diagnosisType={diagnosisTypeSelect}
           />
-        }
+        )}
         {/* )} */}
 
         {addAppointment && <AddAppointment />}
@@ -755,22 +764,22 @@ export default function PateientList(props: any) {
          ePatient = {editSelectedPatient}
 
         /> */}
-        
+
         <DeleteUser
-                 deleteUser = {deleteUser}
-                 onEditModalClose={() => { setdeleteUser(false) }}
-                 ePatient = {editSelectedPatient}
-        
+          deleteUser={deleteUser}
+          onEditModalClose={() => {
+            setdeleteUser(false);
+          }}
+          ePatient={editSelectedPatient}
         />
 
         <AddAppointment
-                 addAppointment = {addAppointment}
-                 onEditModalClose={() => { setaddAppointment(false) }}
-                 ePatient = {editSelectedPatient}
-        
+          addAppointment={addAppointment}
+          onEditModalClose={() => {
+            setaddAppointment(false);
+          }}
+          ePatient={editSelectedPatient}
         />
-
-        
       </div>
     </div>
   );
